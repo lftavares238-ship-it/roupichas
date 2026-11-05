@@ -350,3 +350,40 @@ h3 { font-size: 16px; margin-bottom: 12px; }
     .cal-day { font-size: 11px; }
     .stat-num { font-size: 26px; }
 }
+
+/* ===== SEED ===== */
+.seed-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+.btn-seed, .btn-clear {
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-seed {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: #faf5ff;
+}
+.btn-seed:hover {
+    background: var(--primary);
+    color: #fff;
+    transform: translateY(-1px);
+}
+.btn-clear {
+    color: var(--danger);
+}
+.btn-clear:hover {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}

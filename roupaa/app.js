@@ -34,6 +34,7 @@ function init() {
     setupCalendar();
     setupTravel();
     setupBazar();
+    setupSeed();
     checkAuth();
 }
 
@@ -660,4 +661,99 @@ function setupBazar() {
         );
     });
     renderBazares();
+}
+
+/* ================= SEED (ROUPAS DE TESTE) ================= */
+
+// Gera uma imagem SVG colorida com emoji + nome (funciona offline)
+function makePlaceholder(bg, emoji, label, textColor = '#fff') {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+        <rect width="400" height="400" fill="${bg}"/>
+        <text x="200" y="180" font-size="140" text-anchor="middle"
+              dominant-baseline="middle">${emoji}</text>
+        <text x="200" y="320" font-size="26" text-anchor="middle"
+              fill="${textColor}" font-weight="bold"
+              font-family="Segoe UI, sans-serif">${label}</text>
+    </svg>`;
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+// Converte "N dias atrás" em ISO string
+function daysAgo(n) {
+    const d = new Date();
+    d.setDate(d.getDate() - n);
+    return d.toISOString();
+}
+
+function setupSeed() {
+    document.getElementById('btn-seed').addEventListener('click', () => {
+        if (clothes.length && !confirm('Isso substituirá as peças atuais. Continuar?')) return;
+        loadSampleClothes();
+        alert('✅ 20 peças de teste carregadas!');
+    });
+
+    document.getElementById('btn-clear').addEventListener('click', () => {
+        if (!confirm('Apagar todas as peças do armário?')) return;
+        clothes = [];
+        outfits = [];
+        saveClothes();
+        saveOutfits();
+        renderCloset();
+        renderStats();
+        renderCalendar();
+    });
+}
+
+function loadSampleClothes() {
+    // [nome, categoria, cor, emoji, corTexto, preço, ocasiões, usos, diasDesdeÚltimoUso]
+    const samples = [
+        // ---------- CAMISAS / BLUSAS ----------
+        ['Camiseta Branca Básica', 'camisa', '#f5f5f5', '👕', '#333', 39.90,  ['casual','estudo'],           12, 2],
+        ['Camisa Social Azul',     'camisa', '#3b82f6', '👔', '#fff', 129.90, ['trabalho'],                  8,  5],
+        ['Blusa Floral Rosa',      'camisa', '#ec4899', '👚', '#fff', 89.90,  ['festa','casual'],            3,  20],
+        ['Camiseta Preta',         'camisa', '#1f2937', '👕', '#fff', 49.90,  ['casual','viagem'],           15, 1],
+        ['Regata Verde',           'camisa', '#10b981', '🩱', '#fff', 29.90,  ['casual','viagem'],           5,  10],
+        ['Blusa de Frio Cinza',    'camisa', '#6b7280', '🧥', '#fff', 149.90, ['trabalho','casual'],         2,  30],
+        ['Cropped Vermelho',       'camisa', '#dc2626', '👚', '#fff', 69.90,  ['festa'],                     0,  null],
+
+        // ---------- CALÇAS / SHORTS ----------
+        ['Calça Jeans Skinny',     'calca', '#1e40af', '👖', '#fff', 179.90, ['casual'],                    10, 3],
+        ['Calça Social Preta',     'calca', '#111827', '👖', '#fff', 199.90, ['trabalho'],                  6,  7],
+        ['Short Jeans',            'calca', '#3b82f6', '🩳', '#fff', 79.90,  ['casual','viagem'],           4,  15],
+        ['Legging Preta',          'calca', '#000000', '👖', '#fff', 59.90,  ['casual','estudo'],           8,  4],
+        ['Calça Bege Alfaiataria', 'calca', '#d4a574', '👖', '#fff', 189.90, ['trabalho','festa'],          1,  45],
+
+        // ---------- CALÇADOS ----------
+        ['Tênis Branco',           'sapato', '#e5e7eb', '👟', '#333', 249.90, ['casual'],                    14, 2],
+        ['Sapato Social Preto',    'sapato', '#1f2937', '👞', '#fff', 289.90, ['trabalho'],                  5,  8],
+        ['Sandália Dourada',       'sapato', '#f59e0b', '👠', '#fff', 159.90, ['festa'],                     2,  25],
+        ['Bota Preta',             'sapato', '#3f2f1a', '👢', '#fff', 329.90, ['trabalho','casual'],         3,  12],
+        ['Chinelo Havaianas',      'sapato', '#06b6d4', '🩴', '#fff', 25.90,  ['viagem','casual'],           20, 1],
+
+        // ---------- ACESSÓRIOS ----------
+        ['Bolsa Marrom',           'acessorio', '#78350f', '👜', '#fff', 199.90, ['casual','trabalho'],      7,  5],
+        ['Colar Dourado',          'acessorio', '#f59e0b', '📿', '#fff', 49.90,  ['festa'],                  1,  40],
+        ['Cinto Preto',            'acessorio', '#1f2937', '🎀', '#fff', 89.90,  ['trabalho'],               4,  10],
+        ['Óculos de Sol',          'acessorio', '#0f172a', '🕶️', '#fff', 159.90, ['viagem'],                 0,  null]
+    ];
+
+    clothes = samples.map(([name, category, bg, emoji, textColor, price, occasions, timesWorn, lastWornDays], i) => ({
+        id: Date.now() + i,
+        name,
+        category,
+        image_url: makePlaceholder(bg, emoji, name, textColor),
+        price,
+        occasions,
+        seasons: WEATHERS.slice(),
+        timesWorn,
+        lastWorn: lastWornDays === null ? null : daysAgo(lastWornDays),
+        created_at: daysAgo(60 - i)
+    }));
+
+    outfits = [];
+    saveClothes();
+    saveOutfits();
+    renderCloset();
+    renderStats();
+    renderCalendar();
 }
