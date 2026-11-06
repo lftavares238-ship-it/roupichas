@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCloset · Seu armário inteligente</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ================= AUTH ================= -->
+    <div id="auth-section" class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <span class="brand-icon">👗</span>
+                <h1>SmartCloset</h1>
+                <p>Seu armário inteligente</p>
+            </div>
+
+            <div class="test-hint">
+                <span class="hint-badge">Modo de Teste</span>
+                <div class="hint-info">
+                    <span><strong>E-mail:</strong> teste@teste.com</span>
+                    <span><strong>Senha:</strong> 123456</span>
+                </div>
+            </div>
+
+            <form id="auth-form">
+                <div class="field">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" placeholder="seu@email.com" required>
+                </div>
+                <div class="field">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="••••••" required>
+                </div>
+                <button type="submit" id="btn-login">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= APP ================= -->
+    <div id="app-section" class="hidden">
+        <header class="app-header">
+            <div class="header-brand">👗 SmartCloset</div>
+            <nav class="tabs">
+                <button data-tab="closet"   class="tab active">Armário</button>
+                <button data-tab="outfit"   class="tab">Look do Dia</button>
+                <button data-tab="chat"     class="tab">🤖 Chatbot</button>
+                <button data-tab="calendar" class="tab">Calendário</button>
+                <button data-tab="stats"    class="tab">Estatísticas</button>
+                <button data-tab="travel"   class="tab">Viagem</button>
+                <button data-tab="bazar"    class="tab">Bazares</button>
+            </nav>
+            <button id="btn-logout">Sair</button>
+        </header>
+
+        <main>
+            <!-- ===== TAB: ARMÁRIO ===== -->
+            <section id="tab-closet" class="tab-panel active">
+                <div class="upload-card">
+                    <h2>➕ Nova Peça</h2>
+                    <form id="upload-form">
+                        <div class="upload-row">
+                            <label class="file-btn">
+                                <input type="file" id="clothing-image" accept="image/*" required>
+                                <span>📷 Foto</span>
+                            </label>
+                            <input type="text" id="clothing-name" placeholder="Nome da peça" required>
+                            <select id="clothing-category" required>
+                                <option value="camisa">👕 Camisa / Blusa</option>
+                                <option value="calca">👖 Calça / Short</option>
+                                <option value="sapato">👟 Calçado</option>
+                                <option value="acessorio">👜 Acessório</option>
+                            </select>
+                            <input type="number" id="clothing-price" placeholder="Preço R$" min="0" step="0.01">
+                        </div>
+                        <div class="upload-row">
+                            <span style="font-size:13px;font-weight:600;">Ocasiões:</span>
+                            <label><input type="checkbox" class="occ" value="trabalho"> Trabalho</label>
+                            <label><input type="checkbox" class="occ" value="festa"> Festa</label>
+                            <label><input type="checkbox" class="occ" value="casual" checked> Casual</label>
+                            <label><input type="checkbox" class="occ" value="estudo"> Estudo</label>
+                            <label><input type="checkbox" class="occ" value="viagem"> Viagem</label>
+                        </div>
+                        <div class="upload-row">
+                            <button type="submit">Adicionar ao armário</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="seed-bar">
+                 <button id="btn-seed" class="btn-seed">🧪 Carregar roupas de teste (20 peças)</button>
+                 <button id="btn-clear" class="btn-clear">🗑️ Limpar armário</button>
+                </div>
+
+                <h2>Minhas Roupas <span id="closet-count"></span></h2>
+                <div id="closet-grid"></div>
+            </section>
+
+            <!-- ===== TAB: LOOK DO DIA ===== -->
+            <section id="tab-outfit" class="tab-panel">
+                <h2>✨ Look do Dia</h2>
+                <div class="outfit-controls">
+                    <select id="occasion-select">
+                        <option value="casual">Casual</option>
+                        <option value="trabalho">Trabalho</option>
+                        <option value="festa">Festa</option>
+                        <option value="estudo">Estudo</option>
+                        <option value="viagem">Viagem</option>
+                    </select>
+                    <button id="btn-weather">🌡️ Clima atual</button>
+                    <button id="btn-suggest">✨ Sugerir Look</button>
+                </div>
+                <div id="outfit-result"></div>
+            </section>
+
+            <!-- ===== TAB: CHATBOT ===== -->
+            <section id="tab-chat" class="tab-panel">
+                <div id="chat-messages"></div>
+                <form id="chat-form">
+                    <input type="text" id="chat-input"
+                           placeholder='Ex: "sugerir look para trabalho"' autocomplete="off">
+                    <button type="submit">Enviar</button>
+                </form>
+            </section>
+
+            <!-- ===== TAB: CALENDÁRIO ===== -->
+            <section id="tab-calendar" class="tab-panel">
+                <div class="calendar-header">
+                    <button id="cal-prev">←</button>
+                    <h2 id="cal-month"></h2>
+                    <button id="cal-next">→</button>
+                </div>
+                <div id="calendar-grid"></div>
+            </section>
+
+            <!-- ===== TAB: ESTATÍSTICAS ===== -->
+            <section id="tab-stats" class="tab-panel">
+                <h2>📊 Estatísticas do armário</h2>
+                <div id="stats-content"></div>
+            </section>
+
+            <!-- ===== TAB: VIAGEM ===== -->
+            <section id="tab-travel" class="tab-panel">
+                <h2>🧳 Montar mala de viagem</h2>
+                <div class="travel-form">
+                    <input type="number" id="travel-days" placeholder="Dias" min="1" max="30" value="3">
+                    <select id="travel-weather">
+                        <option value="quente">☀️ Quente</option>
+                        <option value="ameno" selected>🌤️ Ameno</option>
+                        <option value="frio">❄️ Frio</option>
+                    </select>
+                    <button id="btn-travel">Montar mala</button>
+                </div>
+                <div id="travel-result"></div>
+            </section>
+
+            <!-- ===== TAB: BAZARES ===== -->
+            <section id="tab-bazar" class="tab-panel">
+                <h2>🏪 Bazares próximos</h2>
+                <button id="btn-geoloc-bazar">📍 Usar minha localização</button>
+                <div id="bazar-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
